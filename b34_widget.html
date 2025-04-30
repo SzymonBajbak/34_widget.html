@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>B34 z Google Sheets</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 50px;
+      background: #f0f0f0;
+    }
+    #cell {
+      font-size: 2em;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+  <div id="cell">Wczytywanie...</div>
+
+  <script>
+    const csvUrl = "https://docs.google.com/spreadsheets/d/1JCsQ9PEl0mtq5OXYzqIRVQiTnYMevrJrhUR37FKK26U/export?format=csv&gid=0";
+
+    async function fetchCell() {
+      try {
+        const res = await fetch(csvUrl);
+        const text = await res.text();
+        const rows = text.trim().split("\n");
+
+        // Jeśli CSV ma nagłówki, usuń pierwszy wiersz
+        const cell = rows[33].split(",")[1]; // B34
+        document.getElementById("cell").innerText = cell;
+      } catch (err) {
+        document.getElementById("cell").innerText = "Błąd ładowania";
+      }
+    }
+
+    fetchCell();
+    setInterval(fetchCell, 2000); // co 2 sekundy
+  </script>
+</body>
+</html>
